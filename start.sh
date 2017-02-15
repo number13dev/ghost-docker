@@ -5,6 +5,13 @@ if [ $DB_USR = "root" ]; then
     exit 1
 fi
 
+echo "wait for database"
+while !(mysqladmin -h $DB_HOST -u root -p$DB_ROOT_PW ping)
+do
+    echo "waiting 10seconds ..."
+    sleep 10
+done
+
 echo "Setting up Database"
 mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "DROP USER IF EXISTS '${DB_USR}'@'%';"
 mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
@@ -55,11 +62,8 @@ cd /var/www/ghost
 nginx -t
 service nginx start
 
-if [ $DEBUG = "true" ]; then
-    npm start --development
-else
-    npm start --production
-fi
+npm start --production
+
 
 #for debugging
 #/bin/bash

@@ -10,7 +10,7 @@ RUN apt-get install -y \
     mysql-client \
     curl unzip nginx
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | /bin/bash -
+RUN curl -sL https://deb.nodesource.com/setup_4.x | /bin/bash -
 RUN apt-get install -y nodejs
 
 RUN npm -v
