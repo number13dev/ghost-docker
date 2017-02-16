@@ -51,5 +51,6 @@ export DB_PW=foo
 export DB_ROOT_PW=moo
 
 cd /var/www/ghost
+chown -R www:www /var/www/ghost
 rc-service nginx start
 npm start --production
