@@ -1,31 +1,26 @@
-FROM ubuntu
+FROM alpine
 
 ADD config.js config.js
 ADD start.sh start.sh
 ADD default default
 
-RUN apt-get update
+RUN addgroup -S node && adduser -S -g node node
 
-RUN apt-get install -y \
-    mysql-client \
-    curl unzip nginx
+ADD config.js config.js
+ADD start.sh start.sh
+ADD default default
 
-RUN curl -sL https://deb.nodesource.com/setup_4.x | /bin/bash -
-RUN apt-get install -y nodejs
+RUN apk update
+RUN apk add nodejs openssl nginx mysql-client
 
-RUN npm -v
-
-RUN curl -L https://ghost.org/zip/ghost-latest.zip -o ghost.zip
+RUN wget https://ghost.org/zip/ghost-latest.zip -O ghost.zip
 RUN mkdir -p /var/www/ghost
-RUN unzip -uo ghost.zip -d /var/www/ghost
+RUN unzip -o ghost.zip -d /var/www/ghost
 
+RUN cd /var/www/ghost && npm install --production
 
-WORKDIR /var/www/ghost
-RUN npm install --production
-WORKDIR /
 
 RUN cp /default /etc/nginx/sites-available/default
-
 RUN chmod +x start.sh
 
 EXPOSE 80 443
