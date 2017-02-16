@@ -24,7 +24,7 @@ rm -rf /config_files_sub
 mkdir /config_files_sub
 
 cp config.js /config_files_sub/config.js
-cp default /config_files_sub/default
+cp nginx.conf /config_files_sub/nginx.conf
 
 sed -i "s#{{BLOG_DOMAIN}}#${BLOG_DOMAIN}#g" /config_files_sub/config.js
 
@@ -41,16 +41,8 @@ sed -i "s/{{DB_PW}}/$DB_PW/g" /config_files_sub/config.js
 sed -i "s/{{MAINTENANCE}}/${MAINTENANCE:-false}/g" /config_files_sub/config.js
 
 #nginx
-sed -i "s/{{PORT}}/${PORT:-80}/g" /config_files_sub/default
-cp /config_files_sub/default /etc/nginx/sites-available/default
-
-
-echo "checking if content exists..."
-if [ -d "/var/www/ghost/content/apps" ]; then
-    echo "exists"
-else
-    unzip -uo ghost.zip -d /var/www/ghost
-fi
+sed -i "s/{{PORT}}/${PORT:-80}/g" /config_files_sub/nginx.conf
+cp /config_files_sub/nginx.conf /etc/nginx/nginx.conf
 
 echo "copying config file..."
 cp /config_files_sub/config.js /var/www/ghost/config.js
@@ -59,14 +51,6 @@ export DB_PW=foo
 export DB_ROOT_PW=moo
 
 cd /var/www/ghost
-nginx -t
-service nginx start
+rc-service nginx start
 
 npm start --production
-
-
-#for debugging
-#/bin/bash
-
-
-
