@@ -61,4 +61,12 @@ export DB_ROOT_PW=moo
 
 chown -R www:www /var/www/ghost
 rc-service nginx start
-npm start --production
+
+if [ -z ${DEBUG+x} ]; then
+    echo "Starting in Production:";
+    npm start --production
+else
+    echo "Starting in Development:";
+    npm start --development
+fi
+
