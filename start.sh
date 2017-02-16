@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 echo "Hello from Ghost-Docker"
 
 if [ $DB_USR = "root" ]; then
@@ -52,5 +52,4 @@ export DB_ROOT_PW=moo
 
 cd /var/www/ghost
 rc-service nginx start
-
 npm start --production
