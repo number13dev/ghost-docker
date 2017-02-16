@@ -44,11 +44,13 @@ sed -i "s/{{MAINTENANCE}}/${MAINTENANCE:-false}/g" /config_files_sub/config.js
 sed -i "s/{{PORT}}/${PORT:-80}/g" /config_files_sub/nginx.conf
 cp /config_files_sub/nginx.conf /etc/nginx/nginx.conf
 
+cd /var/www/ghost
 echo "checking if content exists..."
 if [ -d "/var/www/ghost/content/apps" ]; then
     echo "exists"
 else
-    unzip -o ghost.zip -d /var/www/ghost
+    unzip -o /ghost.zip -d /var/www/ghost
+    npm install --production
 fi
 
 echo "copying config file..."
@@ -57,9 +59,6 @@ cp /config_files_sub/config.js /var/www/ghost/config.js
 export DB_PW=foo
 export DB_ROOT_PW=moo
 
-cd /var/www/ghost
 chown -R www:www /var/www/ghost
 rc-service nginx start
 npm start --production
-
-/bin/sh
