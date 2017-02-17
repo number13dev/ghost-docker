@@ -21,7 +21,7 @@ docker run -t -i \
     -e DB_NAME="my-ghost-db-name" \
     -e DB_ROOT_PW="my-secret-sql-root-pw" \
     -e PORT="80" \
-    -e VIRTUAL_HOST="www.turais.de,turais.de" \
+    -e VIRTUAL_HOST="www.example.com,example.com" \
     -e VIRTUAL_NETWORK="nginx-proxy" \
     -e LETSENCRYPT_HOST="www.example.com,example.com" \
     -e LETSENCRYPT_EMAIL="mymail@example.com" \
@@ -33,7 +33,36 @@ Keep in mind that Ghost tries to connect on port 587 for the mail feature.
 
 Docker compose example:
 ```
-
+version: '2'
+services:
+  ghost:
+    image: number13/ghost-docker
+    restart: always
+    networks:
+      - proxy-tier
+    environment:
+        BLOG_DOMAIN: https://www.example.com
+        MAIL: example@example.com
+        DB_HOST: db
+        DB_USR: ghost
+        DB_NAME: ghost
+        DB_PW: secret-pw
+        DB_ROOT_PW: secret-root-pw
+        PORT: 80
+        VIRTUAL_HOST: example.com,example.com
+        VIRTUAL_PORT: 80
+        VIRTUAL_NETWORK: nginx-proxy
+        LETSENCRYPT_HOST: example.com,www.example.com
+        LETSENCRYPT_EMAIL: mail@example.com
+        MAIL_SERVER: smtp.example.com
+        MAIL_LOGIN: noreply@example.com
+        MAIL_PASSWORD: secret-mail-pw
+    volumes:
+      - "~/blogs/ghostblog:/var/www/ghost/content"
+networks:
+  proxy-tier:
+    external:
+      name: nginx-proxy
 ```
 
 #### BLOG_DOMAIN
