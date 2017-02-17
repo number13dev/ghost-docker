@@ -13,9 +13,11 @@ config = {
     production: {
         url: '{{BLOG_DOMAIN}}',
         mail: {
+            from: '{{MAIL_LOGIN}}',
             transport: 'SMTP',
             options: {
                 host: '{{MAIL_SERVER}}',
+                secureConnection: false,
                 port: 587,
                 auth: {
                     user: '{{MAIL_LOGIN}}',
@@ -45,7 +47,19 @@ config = {
     development: {
 
         url: 'http://localhost',
-
+        mail: {
+            from: '{{MAIL_LOGIN}}',
+            transport: 'SMTP',
+            options: {
+                host: '{{MAIL_SERVER}}',
+                secureConnection: false,
+                port: 587,
+                auth: {
+                    user: '{{MAIL_LOGIN}}',
+                    pass: '{{MAIL_PASSWORD}}'
+                }
+            }
+        },
         database: {
             client: 'sqlite3',
             connection: {
