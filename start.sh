@@ -67,6 +67,8 @@ export DB_ROOT_PW=moo
 chown -R www:www /var/www/ghost
 
 rc-service nginx start
+nginx -t
+nginx -s reload
 
 if [ -z ${DEBUG+x} ]; then
     npm start --production
