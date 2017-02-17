@@ -55,6 +55,7 @@ if [ -d "/var/www/ghost/content/apps" ]; then
     echo "exists"
 else
     unzip -o /ghost.zip -d /var/www/ghost
+    mkdir -p /var/www/ghost/content/static
     npm install --production
 fi
 
@@ -66,8 +67,9 @@ export DB_ROOT_PW=moo
 
 chown -R www:www /var/www/ghost
 
-rc-service nginx start
 nginx -t
+nginx
+rc-service nginx start
 nginx -s reload
 
 if [ -z ${DEBUG+x} ]; then

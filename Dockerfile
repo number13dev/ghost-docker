@@ -9,7 +9,7 @@ RUN addgroup -S node && adduser -S -g node node
 RUN adduser -D -u 1000 -g 'www' www
 
 RUN apk update
-RUN apk add nodejs openssl nginx mysql-client openrc
+RUN apk add openrc nodejs openssl nginx mysql-client
 
 ADD start.sh start.sh
 RUN chmod +x start.sh
