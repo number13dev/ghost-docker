@@ -16,7 +16,6 @@ config = {
             transport: 'SMTP',
             options: {
                 host: '{{MAIL_SERVER}}',
-                secureConnection: true,
                 port: 587,
                 auth: {
                     user: '{{MAIL_LOGIN}}',
