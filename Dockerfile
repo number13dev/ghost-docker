@@ -1,9 +1,11 @@
 FROM alpine
 
 ADD config.js config.js
+ADD copyAssets.sh copyAssets.sh
 ADD install.sh install.sh
 ADD nginx.conf nginx.conf
-RUN chmod +x install.sh
+ADD update.sh update.sh
+RUN chmod +x install.sh && chmod +x update.sh && chmod +x copyAssets.sh
 
 RUN addgroup -S node && adduser -S -g node node
 RUN adduser -D -u 1000 -g 'www' www

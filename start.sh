@@ -50,17 +50,28 @@ sed -i "s/{{PORT}}/${PORT:-80}/g" /config_files_sub/nginx.conf
 cp /config_files_sub/nginx.conf /etc/nginx/nginx.conf
 
 cd /var/www/ghost
+
 echo "checking if content exists..."
-if [ -d "/var/www/ghost/content/apps" ]; then
-    echo "exists"
+if [ -f "/var/www/ghost/.installed" ]; then
+    echo "already installed"
 else
     unzip -o /ghost.zip -d /var/www/ghost
     mkdir -p /var/www/ghost/content/static
     npm install --production
+    touch .installed
+fi
+
+if [ -f "/var/www/ghost/.update" ]; then
+    echo "needs update"
+    npm install --production
+    rm .update
 fi
 
 echo "copying config file..."
 cp /config_files_sub/config.js /var/www/ghost/config.js
+
+echo "copy assets"
+./copyAssets.sh
 
 export DB_PW=foo
 export DB_ROOT_PW=moo

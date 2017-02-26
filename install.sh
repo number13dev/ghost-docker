@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "running install"
-wget https://ghost.org/zip/ghost-latest.zip -O ghost.zip
+wget https://github.com/TryGhost/Ghost/releases/download/0.11.5/Ghost-0.11.5.zip -O ghost.zip
 mkdir -p /var/www/ghost
 chown -R www:www /var/lib/nginx
 chown -R www:www /var/www
