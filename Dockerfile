@@ -2,6 +2,7 @@ FROM alpine
 
 ADD config.js config.js
 ADD copyAssets.sh copyAssets.sh
+ADD delete_cache.sh delete_cache.sh
 ADD install.sh install.sh
 ADD nginx.conf nginx.conf
 ADD update.sh update.sh
