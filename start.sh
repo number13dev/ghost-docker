@@ -27,6 +27,7 @@ mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "FLUSH PRIVILEGES;"
 
 rm -rf /config_files_sub
 mkdir /config_files_sub
+mkdir /ghostcache
 
 cp config.js /config_files_sub/config.js
 cp nginx.conf /config_files_sub/nginx.conf
