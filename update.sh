@@ -9,7 +9,7 @@ echo "creating sql dump"
 mysqldump -h $DB_HOST -p$DB_PW -u $DB_USR --all-databases > dump.sql
 
 mv dump.sql ${BKPDIR}/dump.sql
-mv backup-${ID}-ghost.tar.gz ${BKPDIR}/backup-ghost.tar.gz
+mv backup-ghost.tar.gz ${BKPDIR}/backup-ghost.tar.gz
 
 echo "backup done"
 
@@ -20,8 +20,6 @@ rm -rf /var/www/ghost/core
 rm /var/www/ghost/*.js
 rm /var/www/ghost/*.json
 
-echo "stopping docker"
-echo $(pwd)
 cd /var/www/ghost
 
 unzip -o /ghost.zip -d /var/www/ghost

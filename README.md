@@ -1,13 +1,27 @@
-# just another ghost docker container
+# ghost-docker
+> just another ghost docker container
 
-**Don't run this in production! This container is in an early stage of development!**
+[![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?style=plastic)](https://hub.docker.com/r/number13/ghost-docker)
 
-This container is for use with [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy)
+~~**Don't run this in production! This container is in an early stage of development!**~~
 
-Your config.js is overwritten everytime you start your container.
+This container can be used with [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy)
 
-At the moment this container is a little big - needs tweaking. And it don't really
-needs Nginx. But with it you could run this container in the wild.
+Your config.js is overwritten **everytime** you start your container.
+
+It works well with [Alpine Linux](https://hub.docker.com/_/alpine/) and
+has an integrated NGINX which acts as a Proxy.
+
+The NGINX does some Caching. But `proxy_cache_valid` ist set to 1 minute.
+This minute is sufficient enough to reduce load to the Ghost-Server.
+You could choose a higher time, but if you publish your articles, it will take longer
+until they're online.
+
+The Ghost Admin Panel and the Preview-Function are not being cached.
+
+The NGINX is configured in a way, that it propably needs another Proxy in front of it. For SSL etc.
+I use the [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy) and so far, I had no problems with it.
+
 
 ```
 docker run -t -i \
@@ -29,10 +43,10 @@ docker run -t -i \
     number13/ghost-docker
 ```
 
-Keep in mind that Ghost tries to connect on port 587 for the mail feature.
+Keep in mind that Ghost uses port 587 for the remote mail server.
 
 Docker compose example:
-```
+```yaml
 version: '2'
 services:
   ghost:
@@ -65,49 +79,66 @@ networks:
       name: nginx-proxy
 ```
 
-#### BLOG_DOMAIN
-Your Domain from your blog.
+### Persisting your Application
+If you want to backup your Ghost-Data just mount:
+`"~/myblogs/myghostcontent:/var/www/ghost/content"`
 
-#### MAIL_SERVER
-Your Mail Server where Ghost tries to connect to.
+Then backup `~/myblogs/myghostcontent`.
 
-#### MAIL_LOGIN
-Your Login to the Mail-Server
-
-#### MAIL_PASSWORD
-Your Password
-
-#### DB_PW
-Your Database Password
-
-#### DB_USR
-Your Database User
-
-#### DB_NAME
-Your Database Name for this Blog
-
-#### DB_ROOT_PW
-Your root password for your mysql
-
-#### PORT
-The Port where your ghost blog will be available. If you leave this out your Blog will be available at port 80.
-
-#### VIRTUAL_HOST
-Virtual Host for the nginx proxy. Your Domain where your Blog will be available
-
-#### VIRTUAL_NETWORL
-Your Virtual Network
-
-#### LETSENCRYPT_HOST
-Your Hostnames for Letsencrypt certificates
-
-#### LETSENCRYPT_EMAIL
-Your Letsencrypt email - for certifiate renewal reminder
+You could backup your SQL with `mysqldump` which I prefer.
+If you don't have `mysqldump` installed on your Host, consider: [Backup and restore a mysql database from a running Docker mysql container](https://gist.github.com/spalladino/6d981f7b33f6e0afe6bb)
 
 
-##### Volumes
+## Environment variables
+- `BLOG_DOMAIN`: Your Domain from your blog.
+- `MAIL_SERVER`: Your Mail Server where Ghost tries to connect to.
+- `MAIL_LOGIN`: Your Login to the Mail-Server
+- `MAIL_PASSWORD`: Your Password
+- `DB_PW`: Your Database Password
+- `DB_USR`: Your Database User
+- `DB_NAME`: Your Database Name for this Blog
+- `DB_ROOT_PW`: Your root password for your mysql
+- `PORT`: The Port where your ghost blog will be available. Default: **80**
+
+Below: Parameters if you use [Docker Letsencrypt Companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion)
+- `VIRTUAL_HOST`: Virtual Host for the nginx proxy. Your Domain where your Blog will be available
+- `VIRTUAL_NETWORK`: Your Virtual Network
+- `LETSENCRYPT_HOST`: Your Hostnames for Letsencrypt certificates
+- `LETSENCRYPT_EMAIL`: Your Letsencrypt email - for certifiate renewal reminder
+
+### Volumes
 Just mount:
--v ~/ghostblogs/blog001:/var/www/ghost/content \
+`-v ~/myblogs/blog:/var/www/ghost/content`
 so you can backup your pictures etc.
 
+
+## Update GHOST
+You could of course just delete your old Container. Pull a new Image if there is one available.
+And then restart your container.
+Be sure you have backed up all your data. This works because there is no persitent data saved inside your container
+**IF** you've mounted `/var/www/ghost/content` externally.
+
+If there is no new Image available try this:
+`docker exec -i -t YOUR_CONTAINER /update.sh`
+
+This Script does a one-time-backup which gets overwritten every time you start this script.
+So please backup your data in another way. If something went wrong during the script execution, you
+can open a shell in your container like this:
+`docker exec -i -t YOUR_CONTAINER /bin/sh`
+In `/backup` should be an backup of your `/var/www/ghost`-Folder before the update.
+
+###Security
+
+If you don't want to give the container your ROOT-SQL Password. You can of course just add the
+ghost-docker database user yourself.
+
+```sql
+"CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+"CREATE USER IF NOT EXISTS '${DB_USR}'@'%' IDENTIFIED BY '${DB_PW}';"
+"GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USR}'@'%';"
+"FLUSH PRIVILEGES;"
+```
+
+The variables `${DB_NAME}`, `${DB_USR}`, `${DB_PW}` needs to be set to the corresponding Environment Variables.
+Be sure to set some fake password to your `DB_ROOT_PW`-Env variable otherwise the container won't start automatically.
 
