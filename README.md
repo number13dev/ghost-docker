@@ -22,6 +22,20 @@ The Ghost Admin Panel and the Preview-Function are not being cached.
 The NGINX is configured in a way, that it propably needs another Proxy in front of it. For SSL etc.
 I use the [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy) and so far, I had no problems with it.
 
+### Testing on your local machine:
+
+```
+docker run -t -i \
+    -e MAIL_SERVER="smtp.example.com" \
+    -e MAIL_LOGIN="mymaillogin@example.com" \
+    -e MAIL_PASSWORD="my-secret-mail-password" \
+    -e PORT="80" \
+    -p 80:80
+    -v "~/ghost-testing/blogcontent:/var/www/ghost/content" \
+    number13/ghost-docker
+```
+
+### Starting with [Docker Letsencrypt Companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion):
 
 ```
 docker run -t -i \
@@ -39,7 +53,7 @@ docker run -t -i \
     -e VIRTUAL_NETWORK="nginx-proxy" \
     -e LETSENCRYPT_HOST="www.example.com,example.com" \
     -e LETSENCRYPT_EMAIL="mymail@example.com" \
-    -v ~/ghostblogs/blog001:/var/www/ghost/content \
+    -v "~/ghostblogs/blog001:/var/www/ghost/content" \
     number13/ghost-docker
 ```
 
@@ -79,7 +93,14 @@ networks:
       name: nginx-proxy
 ```
 
-### Persisting your Application
+### Stand-Alone Compose:
+
+[Stand Alone docker-compose](stand-alone.yml)
+
+Rename it to `docker-compose.yml`, and edit your ENV variables to your needs.
+
+
+## Persisting your Application
 If you want to backup your Ghost-Data just mount:
 `"~/myblogs/myghostcontent:/var/www/ghost/content"`
 
