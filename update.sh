@@ -24,7 +24,7 @@ echo "stopping docker"
 echo $(pwd)
 cd /var/www/ghost
 
-unzip -o ghost.zip -d /var/www/ghost
+unzip -o /ghost.zip -d /var/www/ghost
 chown -R www:www /var/www
 
 touch /var/www/ghost/.update
