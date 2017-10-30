@@ -5,7 +5,13 @@ if [ $DB_USR = "root" ]; then
     exit 1
 fi
 
-if [ -z ${DEBUG+x} ]; then
+if [ -z "$DEBUG" ]; then
+    echo "PRODUCTION"
+else
+    echo "DEBUG"
+fi
+
+if [ -z "$DEBUG" ]; then
     echo "wait for database"
     while !(mysqladmin -h $DB_HOST -u root -p$DB_ROOT_PW ping)
     do
@@ -13,17 +19,17 @@ if [ -z ${DEBUG+x} ]; then
         sleep 10
     done
 else
-    echo "Starting in Development:";
+    echo "Starting in Development:"
 fi
 
-
-echo "Setting up Database"
-mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "DROP USER IF EXISTS '${DB_USR}'@'%';"
-mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
-mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "CREATE USER IF NOT EXISTS '${DB_USR}'@'%' IDENTIFIED BY '${DB_PW}';"
-mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USR}'@'%';"
-mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "FLUSH PRIVILEGES;"
-
+if [ -z "$DEBUG" ]; then
+    echo "Setting up Database"
+    mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "DROP USER IF EXISTS '${DB_USR}'@'%';"
+    mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+    mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "CREATE USER IF NOT EXISTS '${DB_USR}'@'%' IDENTIFIED BY '${DB_PW}';"
+    mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USR}'@'%';"
+    mysql -u root -p$DB_ROOT_PW -h $DB_HOST -se "FLUSH PRIVILEGES;"
+fi
 
 rm -rf /config_files_sub
 mkdir /config_files_sub
@@ -74,6 +80,9 @@ cp /config_files_sub/config.js /var/www/ghost/config.js
 echo "copy assets"
 find /var/www/ghost/content/themes/ -name "assets" | xargs -i cp -R {} /var/www/ghost/content/static
 
+echo "migrating database"
+knex-migrator init
+
 export DB_PW=foo
 export DB_ROOT_PW=moo
 
@@ -84,9 +93,10 @@ nginx
 rc-service nginx start
 nginx -s reload
 
-if [ -z ${DEBUG+x} ]; then
+if [ -z "$DEBUG" ]; then
+    echo "starting in production"
     npm start --production
 else
+    echo "starting in development"
     npm start --development
 fi
-

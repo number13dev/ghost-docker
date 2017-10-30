@@ -9,4 +9,5 @@ unzip -o ghost.zip -d /var/www/ghost
 cd /var/www/ghost
 pwd
 npm install --production
+npm install -g knex-migrator
 cd /
