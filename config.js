@@ -26,7 +26,7 @@ config = {
             }
         },
         maintenance: {
-            enabled: '{{MAINTENANCE}}'
+            enabled: false
         },
         database: {
           client: 'mysql',
