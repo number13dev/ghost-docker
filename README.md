@@ -1,6 +1,11 @@
 # ghost-docker
 > just another ghost docker container
 
+*DISCONTINUED*
+Just use: https://hub.docker.com/r/library/ghost/
+
+this is here just for migration purposes.
+
 [![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg?style=plastic)](https://hub.docker.com/r/number13/ghost-docker)
 
 ~~**Don't run this in production! This container is in an early stage of development!**~~
