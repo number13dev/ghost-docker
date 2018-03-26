@@ -80,9 +80,6 @@ cp /config_files_sub/config.js /var/www/ghost/config.js
 echo "copy assets"
 find /var/www/ghost/content/themes/ -name "assets" | xargs -i cp -R {} /var/www/ghost/content/static
 
-echo "migrating database"
-knex-migrator init
-
 export DB_PW=foo
 export DB_ROOT_PW=moo
 
