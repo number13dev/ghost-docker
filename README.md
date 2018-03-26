@@ -36,7 +36,7 @@ docker run -t -i \
     -e MAIL_PASSWORD="my-secret-mail-password" \
     -e PORT="80" \
     -p 80:80
-    -v "~/ghost-testing/blogcontent:/var/www/ghost/content" \
+    -v "~/ghosttesting/blogcontent:/var/www/ghost/content" \
     number13/ghost-docker
 ```
 
