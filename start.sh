@@ -62,6 +62,7 @@ echo "checking if content exists..."
 if [ -f "/var/www/ghost/.installed" ]; then
     echo "already installed"
 else
+    wget ${ZIP_URL} -O ghost.zip
     unzip -o /ghost.zip -d /var/www/ghost
     mkdir -p /var/www/ghost/content/static
     npm install --production
