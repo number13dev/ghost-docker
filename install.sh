@@ -19,5 +19,4 @@ pwd
 npm install --production
 cd /
 
-
 echo "~~~~~~~~~~~~~~ ghost unzip done, install done ~~~~~~~~~~~~~~"
