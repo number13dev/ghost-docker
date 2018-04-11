@@ -20,9 +20,10 @@ RUN apt-get install -y wget
 RUN chmod +x install.sh && chmod +x update.sh && chmod +x copyAssets.sh && chmod +x delete_cache.sh
 
 RUN addgroup node
+RUN addgroup www
 RUN adduser --system node
 RUN adduser node node
-RUN adduser --gecos --disabled-login --no-create-home --uid 1000 --ingroup www www
+RUN adduser www www
 
 ADD start.sh start.sh
 RUN chmod +x start.sh
