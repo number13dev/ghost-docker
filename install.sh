@@ -10,8 +10,8 @@ fi
 
 wget ${ZIP_URL} -O ghost.zip
 mkdir -p /var/www/ghost
-chown -R www:www /var/lib/nginx
-chown -R www:www /var/www
+chown -R www-data:www-data /var/lib/nginx
+chown -R www-data:www-data /var/www
 unzip -o ghost.zip -d /var/www/ghost
 
 cd /var/www/ghost

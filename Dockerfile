@@ -19,14 +19,9 @@ RUN apt-get install -y wget
 
 RUN chmod +x install.sh && chmod +x update.sh && chmod +x copyAssets.sh && chmod +x delete_cache.sh
 
-
 RUN adduser --disabled-password --gecos "" www
 RUN adduser --disabled-password --gecos "" node
 
-RUN addgroup www
-RUN addgroup node
-
-RUN adduser www www
 RUN adduser node node
 
 ADD start.sh start.sh
