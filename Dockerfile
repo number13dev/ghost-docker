@@ -23,6 +23,7 @@ RUN addgroup node
 RUN addgroup www
 RUN adduser --system node
 RUN adduser node node
+RUN adduser www
 RUN adduser www www
 
 ADD start.sh start.sh
