@@ -88,7 +88,7 @@ chown -R www:www /var/www/ghost
 
 nginx -t
 nginx
-rc-service nginx start
+systemctl start nginx
 nginx -s reload
 
 if [ -z "$DEBUG" ]; then
