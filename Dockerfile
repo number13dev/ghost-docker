@@ -8,6 +8,7 @@ ADD nginx.conf nginx.conf
 ADD update.sh update.sh
 
 RUN apt-get update
+RUN apt-get install -y apt-utils
 RUN apt-get install -y nodejs
 RUN apt-get install -y npm
 RUN apt-get install -y openssl
@@ -16,15 +17,15 @@ RUN apt-get install -y mysql-client
 RUN apt-get install -y unzip
 RUN apt-get install -y wget
 
-
 RUN chmod +x install.sh && chmod +x update.sh && chmod +x copyAssets.sh && chmod +x delete_cache.sh
 
 RUN addgroup node
+RUN adduser www
 RUN addgroup www
+RUN adduser www www
+
 RUN adduser --system node
 RUN adduser node node
-RUN adduser www
-RUN adduser www www
 
 ADD start.sh start.sh
 RUN chmod +x start.sh
