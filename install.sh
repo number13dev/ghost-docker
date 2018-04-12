@@ -12,4 +12,7 @@ pwd
 npm install --production
 cd /
 
+echo "creating link..."
+#ln -s /usr/bin/nodejs /usr/bin/node
+
 echo "~~~~~~~~~~~~~~ ghost unzip done, install done ~~~~~~~~~~~~~~"

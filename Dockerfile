@@ -9,7 +9,7 @@ ADD update.sh update.sh
 
 RUN apt-get update
 RUN apt-get install -y apt-utils
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs-legacy
 RUN apt-get install -y npm
 RUN apt-get install -y openssl
 RUN apt-get install -y nginx
