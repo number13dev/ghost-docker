@@ -58,23 +58,6 @@ cp /config_files_sub/nginx.conf /etc/nginx/nginx.conf
 
 cd /var/www/ghost
 
-echo "checking if content exists..."
-if [ -f "/var/www/ghost/.installed" ]; then
-    echo "already installed"
-else
-    wget ${ZIP_URL} -O ghost.zip
-    unzip -o /ghost.zip -d /var/www/ghost
-    mkdir -p /var/www/ghost/content/static
-    npm install --production
-    touch .installed
-fi
-
-if [ -f "/var/www/ghost/.update" ]; then
-    echo "needs update"
-    npm install --production
-    rm .update
-fi
-
 echo "copying config file..."
 cp /config_files_sub/config.js /var/www/ghost/config.js
 
@@ -87,14 +70,8 @@ export DB_ROOT_PW=moo
 chown -R www:www /var/www/ghost
 
 nginx -t
-nginx
 systemctl start nginx
 nginx -s reload
 
-if [ -z "$DEBUG" ]; then
-    echo "starting in production"
-    npm start --production
-else
-    echo "starting in development"
-    npm start --development
-fi
+echo "starting in production"
+npm start --production
